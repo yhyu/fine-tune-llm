@@ -2,7 +2,7 @@
 Fine-tune [meta Llama2](https://ai.meta.com/llama/) with [QLoRA](https://arxiv.org/abs/2305.14314) approach.
 
 ## Objective
-This repo is to demostrate how to fine-tune [meta Llama2](https://ai.meta.com/llama/) using single GPU.
+This repo is to demostrate how to fine-tune [meta Llama2](https://ai.meta.com/llama/) on your laptop.
 
 ## Prerequisites
 Before you can download LLama2, you have to fill out this [form](https://ai.meta.com/resources/models-and-libraries/llama-downloads/) (remember to use the same email as you Huggingface account), and login Huggingface in advance.
