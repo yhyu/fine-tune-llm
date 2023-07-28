@@ -16,11 +16,10 @@ def tokenize_QA_for_llm(
         workers: int = 2, batch_size=1024,
 ) -> Dataset:
     def tokenize(example):
-        question = [q.strip() for q in example['question']]
-        answer = [a.strip for a in example['answer']]
-        qa = [q + a for q, a in zip(question, answer)]
+        question = example['question'].strip()
+        answer = example['answer'].strip()
         tokenized_inputs = tokenizer(
-            qa,
+            question + answer,
             return_tensors="pt",
             padding="longest",
             max_length=2048,
@@ -33,22 +32,22 @@ def tokenize_QA_for_llm(
             max_length=2048,
             truncation=True,
         )
-        input_ids = tokenized_inputs.input_ids
+        input_ids = tokenized_inputs.input_ids[0]
         label_ids = copy.deepcopy(input_ids)
-        for label, question in zip(label_ids, tokenized_questions.input_ids):
-            label[:len(question)] = IGNORE_INDEX
+        q_len = tokenized_questions.input_ids[0].ne(tokenizer.pad_token_id).sum().item()
+        label_ids[:q_len] = IGNORE_INDEX
         return dict(
             input_ids=input_ids,
             labels=label_ids,
         )
     
-    return ds.map(
+    ds_tokenized = ds.map(
         tokenize,
-        batched=True,
-        batch_size=batch_size,
         remove_columns=ds.column_names,
         num_proc=workers,
     )
+    ds_tokenized.set_format(type='torch')
+    return ds_tokenized
 
 
 def resize_token_embedding(
