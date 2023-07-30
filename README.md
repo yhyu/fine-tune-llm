@@ -47,3 +47,5 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 model = PeftModel.from_pretrained(model, adapter)
 ```
+
+The alternative way to run the model inference without logging into Huggingface (skip the [Prerequisites](#prerequisites) section) is to use the merged version of the model [llama-2-7b-MedQuAD-merged](EdwardYu/llama-2-7b-MedQuAD-merged).
