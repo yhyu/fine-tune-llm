@@ -13,11 +13,12 @@ UNK_TOKEN = "</s>"
 
 def tokenize_QA_for_llm(
         ds: Dataset, tokenizer,
-        workers: int = 2, batch_size=1024,
+        workers: int = 2,
+        in_col='question', out_col='answer',
 ) -> Dataset:
     def tokenize(example):
-        question = example['question'].strip()
-        answer = example['answer'].strip()
+        question = example[in_col].strip()
+        answer = example[out_col].strip()
         tokenized_inputs = tokenizer(
             question + answer,
             return_tensors="pt",
